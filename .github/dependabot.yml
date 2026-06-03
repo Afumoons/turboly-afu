@@ -4,23 +4,17 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
-    open-pull-requests-limit: 3
+    # Freeze dependency PR noise during the coding challenge review.
+    # The submitted app is already verified against the locked bundle.
+    open-pull-requests-limit: 0
     ignore:
-      # Keep the framework version fixed during the coding challenge review.
-      # Turboly requires Rails 7.2 and this app is verified on 7.2.2.2.
-      - dependency-name: "rails"
-
-      # Rails 7.2 test runner is currently verified with Minitest 5.x here.
-      # Minitest 6 caused compatibility issues on the RubyInstaller setup.
-      - dependency-name: "minitest"
-        update-types: ["version-update:semver-major"]
+      - dependency-name: "*"
 
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
       interval: weekly
-    open-pull-requests-limit: 3
+    # Freeze workflow dependency PR noise during the coding challenge review.
+    open-pull-requests-limit: 0
     ignore:
-      # Keep CI stable for the challenge and avoid noisy major-version PRs.
       - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
