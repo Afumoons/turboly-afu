@@ -1,12 +1,22 @@
 version: 2
 updates:
-- package-ecosystem: bundler
-  directory: "/"
-  schedule:
-    interval: daily
-  open-pull-requests-limit: 10
-- package-ecosystem: github-actions
-  directory: "/"
-  schedule:
-    interval: daily
-  open-pull-requests-limit: 10
+  - package-ecosystem: bundler
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 3
+    ignore:
+      # The coding challenge requires Rails 7.2, so avoid unrelated
+      # framework major-version PRs during review.
+      - dependency-name: "rails"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 3
+    ignore:
+      # Keep CI stable for the challenge and avoid noisy major-version PRs.
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
