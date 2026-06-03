@@ -38,7 +38,7 @@ group :development, :test do
   gem "brakeman", require: false
 
   # Rails 7.2 test runner is compatible with Minitest 5.x.
-  gem "minitest", "~> 5.25"
+  gem "minitest", "~> 6.0"
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
