@@ -6,9 +6,13 @@ updates:
       interval: weekly
     open-pull-requests-limit: 3
     ignore:
-      # The coding challenge requires Rails 7.2, so avoid unrelated
-      # framework major-version PRs during review.
+      # Keep the framework version fixed during the coding challenge review.
+      # Turboly requires Rails 7.2 and this app is verified on 7.2.2.2.
       - dependency-name: "rails"
+
+      # Rails 7.2 test runner is currently verified with Minitest 5.x here.
+      # Minitest 6 caused compatibility issues on the RubyInstaller setup.
+      - dependency-name: "minitest"
         update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
