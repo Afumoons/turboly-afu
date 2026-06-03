@@ -1,0 +1,21 @@
+today:
+  user: afu
+  description: Pay supplier invoice
+  due_date: <%= Date.current %>
+  priority: 3
+  completed: false
+
+later:
+  user: afu
+  description: Review stock report
+  due_date: <%= Date.current + 2.days %>
+  priority: 1
+  completed: false
+
+completed:
+  user: afu
+  description: Prepare interview notes
+  due_date: <%= Date.current - 1.day %>
+  priority: 2
+  completed: true
+  completed_at: <%= Time.current %>

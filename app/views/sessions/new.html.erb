@@ -1,0 +1,28 @@
+<% content_for :title, "Login · Turboly Tasks" %>
+
+<section class="mx-auto grid max-w-5xl gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+  <div class="rounded-[2rem] border border-white/70 bg-white/85 p-6 shadow-2xl shadow-slate-900/10 backdrop-blur sm:p-8">
+    <h1 class="text-3xl font-semibold tracking-tight">Welcome back</h1>
+    <p class="mt-2 text-sm text-slate-500">Log in to review, sort, and complete your tasks.</p>
+
+    <%= form_with url: login_path, class: "mt-8 space-y-5" do |form| %>
+      <div>
+        <%= form.label :email, class: "text-sm font-medium text-slate-700" %>
+        <%= form.email_field :email, autocomplete: "email", required: true, class: "mt-2 w-full rounded-2xl border-0 bg-slate-100 px-4 py-3 text-slate-900 ring-1 ring-slate-200 transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+      </div>
+      <div>
+        <%= form.label :password, class: "text-sm font-medium text-slate-700" %>
+        <%= form.password_field :password, autocomplete: "current-password", required: true, class: "mt-2 w-full rounded-2xl border-0 bg-slate-100 px-4 py-3 text-slate-900 ring-1 ring-slate-200 transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+      </div>
+      <%= form.submit "Login", class: "w-full cursor-pointer rounded-2xl bg-slate-950 px-5 py-3 font-semibold text-white shadow-lg shadow-slate-900/15 transition hover:-translate-y-0.5 hover:bg-slate-800" %>
+    <% end %>
+
+    <p class="mt-6 text-center text-sm text-slate-500">Need an account? <%= link_to "Register", sign_up_path, class: "font-semibold text-slate-950 hover:underline" %></p>
+  </div>
+
+  <div class="px-2">
+    <p class="mb-4 inline-flex rounded-full bg-white px-4 py-2 text-sm font-medium text-slate-600 shadow-sm ring-1 ring-slate-200">Task dashboard</p>
+    <h2 class="max-w-xl text-4xl font-semibold tracking-[-0.04em] text-slate-950 sm:text-5xl lg:text-6xl">Today, priority, done.</h2>
+    <p class="mt-5 max-w-lg text-lg leading-8 text-slate-600">A focused, responsive workspace for daily execution across mobile, tablet, and desktop.</p>
+  </div>
+</section>

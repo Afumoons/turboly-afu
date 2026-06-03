@@ -1,0 +1,129 @@
+<% content_for :title, "Tasks · Turboly Tasks" %>
+
+<section class="space-y-8">
+  <div class="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+    <div>
+      <p class="inline-flex rounded-full bg-white px-4 py-2 text-sm font-medium text-slate-600 shadow-sm ring-1 ring-slate-200">Personal task command center</p>
+      <h1 class="mt-5 max-w-3xl text-4xl font-semibold tracking-[-0.045em] text-slate-950 sm:text-5xl lg:text-6xl">Plan the day. Clear the list.</h1>
+      <p class="mt-4 max-w-2xl text-lg leading-8 text-slate-600">Add tasks with due dates and priority, sort the list instantly, and act on anything due today.</p>
+    </div>
+
+    <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3">
+      <div class="rounded-[1.5rem] bg-white/85 p-5 shadow-sm ring-1 ring-slate-200/70">
+        <p class="text-sm text-slate-500">Open</p>
+        <p class="mt-2 text-3xl font-semibold"><%= @open_count %></p>
+      </div>
+      <div class="rounded-[1.5rem] bg-white/85 p-5 shadow-sm ring-1 ring-slate-200/70">
+        <p class="text-sm text-slate-500">Done</p>
+        <p class="mt-2 text-3xl font-semibold"><%= @completed_count %></p>
+      </div>
+      <div class="col-span-2 rounded-[1.5rem] bg-slate-950 p-5 text-white shadow-lg shadow-slate-900/15 sm:col-span-1 lg:col-span-2 xl:col-span-1">
+        <p class="text-sm text-slate-300">Due today</p>
+        <p class="mt-2 text-3xl font-semibold"><%= @due_today_tasks.count %></p>
+      </div>
+    </div>
+  </div>
+
+  <% if @due_today_tasks.any? %>
+    <div class="rounded-[2rem] border border-amber-200 bg-amber-50/90 p-5 shadow-sm">
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h2 class="text-lg font-semibold text-amber-950">Due today</h2>
+          <p class="mt-1 text-sm text-amber-800">These tasks need attention now.</p>
+        </div>
+        <span class="rounded-full bg-amber-200/80 px-4 py-2 text-sm font-semibold text-amber-950"><%= pluralize(@due_today_tasks.count, "task") %></span>
+      </div>
+      <div class="mt-4 grid gap-3 md:grid-cols-2">
+        <% @due_today_tasks.each do |task| %>
+          <div class="rounded-2xl bg-white/75 p-4 ring-1 ring-amber-200/70">
+            <p class="font-medium text-slate-950"><%= task.description %></p>
+            <p class="mt-1 text-sm text-slate-500"><%= task.priority_name %> priority</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+    <div class="rounded-[2rem] border border-white/70 bg-white/85 p-6 shadow-xl shadow-slate-900/5 backdrop-blur">
+      <h2 class="text-xl font-semibold tracking-tight">New task</h2>
+      <p class="mt-2 text-sm text-slate-500">Keep it short and actionable.</p>
+
+      <%= form_with model: @task, url: tasks_path(sort: @sort), class: "mt-6 space-y-5" do |form| %>
+        <% if @task.errors.any? %>
+          <div class="rounded-3xl bg-rose-50 p-4 text-sm text-rose-700 ring-1 ring-rose-200">
+            <p class="font-semibold">Please fix the following:</p>
+            <ul class="mt-2 list-disc pl-5">
+              <% @task.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div>
+          <%= form.label :description, class: "text-sm font-medium text-slate-700" %>
+          <%= form.text_field :description, required: true, maxlength: 180, placeholder: "e.g. Send GitHub update", class: "mt-2 w-full rounded-2xl border-0 bg-slate-100 px-4 py-3 ring-1 ring-slate-200 transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+        </div>
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+          <div>
+            <%= form.label :due_date, class: "text-sm font-medium text-slate-700" %>
+            <%= form.date_field :due_date, required: true, class: "mt-2 w-full rounded-2xl border-0 bg-slate-100 px-4 py-3 ring-1 ring-slate-200 transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+          </div>
+          <div>
+            <%= form.label :priority, class: "text-sm font-medium text-slate-700" %>
+            <%= form.select :priority, Task::PRIORITIES.map { |label, value| [label, value] }, {}, class: "mt-2 w-full rounded-2xl border-0 bg-slate-100 px-4 py-3 ring-1 ring-slate-200 transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+          </div>
+        </div>
+        <%= form.submit "Add task", class: "w-full cursor-pointer rounded-2xl bg-slate-950 px-5 py-3 font-semibold text-white shadow-lg shadow-slate-900/15 transition hover:-translate-y-0.5 hover:bg-slate-800" %>
+      <% end %>
+    </div>
+
+    <div class="rounded-[2rem] border border-white/70 bg-white/85 p-4 shadow-xl shadow-slate-900/5 backdrop-blur sm:p-6">
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h2 class="text-xl font-semibold tracking-tight">Your tasks</h2>
+          <p class="mt-1 text-sm text-slate-500">Sorted by <%= @sort.humanize.downcase %>.</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <% [["Due date", "due_date"], ["Description", "description"], ["Priority", "priority"]].each do |label, value| %>
+            <%= link_to label, tasks_path(sort: value), class: "rounded-full px-4 py-2 text-sm font-medium transition #{ @sort == value ? 'bg-slate-950 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }" %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="mt-6 space-y-3">
+        <% if @tasks.any? %>
+          <% @tasks.each do |task| %>
+            <article class="group rounded-3xl border border-slate-200/80 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-slate-900/5 <%= 'opacity-60' if task.completed? %>">
+              <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div class="min-w-0">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <span class="rounded-full px-3 py-1 text-xs font-semibold <%= task.completed? ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-700' %>"><%= task.completed? ? 'Completed' : task.priority_name %></span>
+                    <% if task.due_date == Date.current && !task.completed? %>
+                      <span class="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">Due today</span>
+                    <% end %>
+                  </div>
+                  <h3 class="mt-3 text-lg font-semibold tracking-tight <%= 'line-through' if task.completed? %>"><%= task.description %></h3>
+                  <p class="mt-1 text-sm text-slate-500">Due <%= task.due_date.strftime("%b %-d, %Y") %></p>
+                </div>
+                <div class="flex shrink-0 gap-2">
+                  <% unless task.completed? %>
+                    <%= button_to "Complete", complete_task_path(task, sort: @sort), method: :patch, class: "rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700" %>
+                  <% end %>
+                  <%= link_to "Edit", edit_task_path(task, sort: @sort), class: "rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-200" %>
+                  <%= button_to "Delete", task_path(task, sort: @sort), method: :delete, class: "rounded-full bg-rose-50 px-4 py-2 text-sm font-semibold text-rose-700 transition hover:bg-rose-100", form: { data: { turbo_confirm: "Delete this task?" } } %>
+                </div>
+              </div>
+            </article>
+          <% end %>
+        <% else %>
+          <div class="rounded-3xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center">
+            <p class="font-semibold text-slate-700">No tasks yet.</p>
+            <p class="mt-1 text-sm text-slate-500">Create your first task to begin.</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,40 @@
+<% content_for :title, "Edit task · Turboly Tasks" %>
+
+<section class="mx-auto max-w-2xl rounded-[2rem] border border-white/70 bg-white/85 p-6 shadow-xl shadow-slate-900/5 backdrop-blur sm:p-8">
+  <div class="flex items-start justify-between gap-4">
+    <div>
+      <h1 class="text-3xl font-semibold tracking-tight">Edit task</h1>
+      <p class="mt-2 text-sm text-slate-500">Update description, due date, or priority.</p>
+    </div>
+    <%= link_to "Back", tasks_path(sort: params[:sort]), class: "rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200" %>
+  </div>
+
+  <%= form_with model: @task, url: task_path(@task, sort: params[:sort]), class: "mt-8 space-y-5" do |form| %>
+    <% if @task.errors.any? %>
+      <div class="rounded-3xl bg-rose-50 p-4 text-sm text-rose-700 ring-1 ring-rose-200">
+        <p class="font-semibold">Please fix the following:</p>
+        <ul class="mt-2 list-disc pl-5">
+          <% @task.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div>
+      <%= form.label :description, class: "text-sm font-medium text-slate-700" %>
+      <%= form.text_field :description, required: true, maxlength: 180, class: "mt-2 w-full rounded-2xl border-0 bg-slate-100 px-4 py-3 ring-1 ring-slate-200 transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+    </div>
+    <div class="grid gap-4 sm:grid-cols-2">
+      <div>
+        <%= form.label :due_date, class: "text-sm font-medium text-slate-700" %>
+        <%= form.date_field :due_date, required: true, class: "mt-2 w-full rounded-2xl border-0 bg-slate-100 px-4 py-3 ring-1 ring-slate-200 transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+      </div>
+      <div>
+        <%= form.label :priority, class: "text-sm font-medium text-slate-700" %>
+        <%= form.select :priority, Task::PRIORITIES.map { |label, value| [label, value] }, {}, class: "mt-2 w-full rounded-2xl border-0 bg-slate-100 px-4 py-3 ring-1 ring-slate-200 transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+      </div>
+    </div>
+    <%= form.submit "Save changes", class: "w-full cursor-pointer rounded-2xl bg-slate-950 px-5 py-3 font-semibold text-white shadow-lg shadow-slate-900/15 transition hover:-translate-y-0.5 hover:bg-slate-800" %>
+  <% end %>
+</section>

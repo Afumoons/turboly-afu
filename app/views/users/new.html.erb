@@ -1,0 +1,43 @@
+<% content_for :title, "Create account · Turboly Tasks" %>
+
+<section class="mx-auto grid max-w-5xl gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+  <div class="order-2 lg:order-1">
+    <p class="mb-4 inline-flex rounded-full bg-white px-4 py-2 text-sm font-medium text-slate-600 shadow-sm ring-1 ring-slate-200">Coding challenge workspace</p>
+    <h1 class="max-w-xl text-4xl font-semibold tracking-[-0.04em] text-slate-950 sm:text-5xl lg:text-6xl">Organize work with calm clarity.</h1>
+    <p class="mt-5 max-w-lg text-lg leading-8 text-slate-600">Create an account, enter your tasks, sort them by due date, description, or priority, and stay aware of what is due today.</p>
+  </div>
+
+  <div class="order-1 rounded-[2rem] border border-white/70 bg-white/85 p-6 shadow-2xl shadow-slate-900/10 backdrop-blur lg:order-2 sm:p-8">
+    <h2 class="text-2xl font-semibold tracking-tight">Register</h2>
+    <p class="mt-2 text-sm text-slate-500">Start with an email and secure password.</p>
+
+    <%= form_with model: @user, url: sign_up_path, class: "mt-8 space-y-5" do |form| %>
+      <% if @user.errors.any? %>
+        <div class="rounded-3xl bg-rose-50 p-4 text-sm text-rose-700 ring-1 ring-rose-200">
+          <p class="font-semibold">Please fix the following:</p>
+          <ul class="mt-2 list-disc pl-5">
+            <% @user.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div>
+        <%= form.label :email, class: "text-sm font-medium text-slate-700" %>
+        <%= form.email_field :email, autocomplete: "email", required: true, class: "mt-2 w-full rounded-2xl border-0 bg-slate-100 px-4 py-3 text-slate-900 ring-1 ring-slate-200 transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+      </div>
+      <div>
+        <%= form.label :password, class: "text-sm font-medium text-slate-700" %>
+        <%= form.password_field :password, autocomplete: "new-password", required: true, minlength: 8, class: "mt-2 w-full rounded-2xl border-0 bg-slate-100 px-4 py-3 text-slate-900 ring-1 ring-slate-200 transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+      </div>
+      <div>
+        <%= form.label :password_confirmation, class: "text-sm font-medium text-slate-700" %>
+        <%= form.password_field :password_confirmation, autocomplete: "new-password", required: true, minlength: 8, class: "mt-2 w-full rounded-2xl border-0 bg-slate-100 px-4 py-3 text-slate-900 ring-1 ring-slate-200 transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+      </div>
+      <%= form.submit "Create account", class: "w-full cursor-pointer rounded-2xl bg-slate-950 px-5 py-3 font-semibold text-white shadow-lg shadow-slate-900/15 transition hover:-translate-y-0.5 hover:bg-slate-800" %>
+    <% end %>
+
+    <p class="mt-6 text-center text-sm text-slate-500">Already registered? <%= link_to "Log in", login_path, class: "font-semibold text-slate-950 hover:underline" %></p>
+  </div>
+</section>
