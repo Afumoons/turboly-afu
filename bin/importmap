@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-require "rubygems"
-require "bundler/setup"
 
-load Gem.bin_path("importmap-rails", "importmap")
+require_relative "../config/application"
+require "importmap/commands"
